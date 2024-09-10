@@ -10,20 +10,21 @@ import io from "socket.io-client";
 import "./Chat.css";
 import { Link } from "react-router-dom";
 
-const socket = io("https://job-lxhp.onrender.com");
+const BASE_URL = "https://job-lxhp.onrender.com";
+const socket = io(BASE_URL);
 
 const Chat = () => {
   const [data, setData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState({});
   const [error, setError] = useState(null);
   const messageRef = useRef(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.get(`${window.location.origin}/myprofile`, {
+        const res = await axios.get(`${BASE_URL}/myprofile`, {
           headers: {
             "x-token": localStorage.getItem("token"),
           },
@@ -37,7 +38,7 @@ const Chat = () => {
 
     const fetchMessages = async () => {
       try {
-        const res = await axios.get("https://job-lxhp.onrender.com/getmsg", {
+        const res = await axios.get(`${BASE_URL}/getmsg`, {
           headers: {
             "x-token": localStorage.getItem("token"),
           },
@@ -80,7 +81,7 @@ const Chat = () => {
 
     try {
       await axios.post(
-        "https://job-lxhp.onrender.com/addmsg",
+        `${BASE_URL}/addmsg`,
         { text: newMessage, username: username.fullname },
         {
           headers: {

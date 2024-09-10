@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import axios from 'axios';
-import './Login.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import axios from "axios";
+import "./Login.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+
+// Define the base URL
+const BASE_URL = "https://job-lxhp.onrender.com";
 
 const Login = () => {
   const [auth, setAuth] = useState(false);
   const [data, setData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const changeHandler = (e) => {
@@ -18,17 +21,18 @@ const Login = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    axios.post(`${window.location.origin}/login1`, data)
+    axios
+      .post(`${BASE_URL}/login1`, data)
       .then((res) => {
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem("token", res.data.token);
         setAuth(true);
       })
       .catch((err) => {
-        console.error('Error logging in:', err);
+        console.error("Error logging in:", err);
         if (err.response && err.response.data) {
           alert(`Error: ${err.response.data.msg}`);
         } else {
-          alert('An error occurred while logging in. Please try again later.');
+          alert("An error occurred while logging in. Please try again later.");
         }
       });
   };

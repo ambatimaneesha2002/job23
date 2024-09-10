@@ -1,22 +1,31 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Register.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faEnvelope, faPhone, faPencilAlt, faLock } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Register.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faEnvelope,
+  faPhone,
+  faPencilAlt,
+  faLock,
+} from "@fortawesome/free-solid-svg-icons";
+
+// Define the base URL
+const BASE_URL = "https://job-lxhp.onrender.com";
 
 const Register = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
-    fullname: '',
-    email: '',
-    mobile: '',
-    skill: '',
-    password: '',
-    confirmpassword: '',
+    fullname: "",
+    email: "",
+    mobile: "",
+    skill: "",
+    password: "",
+    confirmpassword: "",
   });
 
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
 
   const changeHandler = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -24,15 +33,24 @@ const Register = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    axios.post(`${window.location.origin}/register1`, data)
+
+    // Ensure passwords match
+    if (data.password !== data.confirmpassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    axios
+      .post(`${BASE_URL}/register1`, data)
       .then((res) => {
         console.log(res.data);
-        setSuccessMessage('You have registered successfully');
-        alert('You have registered successfully');
+        setSuccessMessage("You have registered successfully");
+        alert("You have registered successfully");
+        navigate("/login1"); // Redirect to login page after successful registration
       })
       .catch((err) => {
-        console.error('Error registering:', err);
-        setSuccessMessage('');
+        console.error("Error registering:", err);
+        setSuccessMessage("");
       });
   };
 
@@ -168,7 +186,7 @@ const Register = () => {
         </form>
         {successMessage && <p className="my-1">{successMessage}</p>}
         <p className="my-1">
-          Already have an account? <Link to="/login1" onClick={() => navigate('/login1')}>Sign In</Link>
+          Already have an account? <Link to="/login1">Sign In</Link>
         </p>
       </section>
     </div>
