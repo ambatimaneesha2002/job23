@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Myprofile.css'
+import React, { useState, useEffect } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Myprofile.css";
 
 const Myprofile = () => {
   const [data, setData] = useState(null);
@@ -10,23 +10,23 @@ const Myprofile = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:4000/myprofile', {
+      .get("https://job-lxhp.onrender.com/myprofile", {
         headers: {
-          'x-token': localStorage.getItem('token'),
+          "x-token": localStorage.getItem("token"),
         },
       })
       .then((res) => setData(res.data));
 
     axios
-      .get('http://localhost:4000/myreview', {
+      .get("https://job-lxhp.onrender.com/myreview", {
         headers: {
-          'x-token': localStorage.getItem('token'),
+          "x-token": localStorage.getItem("token"),
         },
       })
       .then((res) => setReview(res.data));
   }, []);
 
-  if (!localStorage.getItem('token')) {
+  if (!localStorage.getItem("token")) {
     return <Navigate to="/login1" />;
   }
 
@@ -66,7 +66,10 @@ const Myprofile = () => {
               <h1 className="large">{data.fullname}</h1>
               <p className="lead">{data.email}</p>
               <p>{data.mobile}</p>
-              <button className="btn btn-primary" onClick={() => handleViewProfile(data._id)}>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleViewProfile(data._id)}
+              >
                 View Profile
               </button>
             </div>
@@ -95,7 +98,11 @@ const Myprofile = () => {
                         required
                       />
                     </div>
-                    <input type="submit" className="btn btn-primary" value="Add Rating" />
+                    <input
+                      type="submit"
+                      className="btn btn-primary"
+                      value="Add Rating"
+                    />
                   </form>
                 </div>
               </div>

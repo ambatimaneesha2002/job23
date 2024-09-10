@@ -1,19 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperclip, faSmile, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import io from 'socket.io-client';
-import './Chat.css';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPaperclip,
+  faSmile,
+  faPaperPlane,
+} from "@fortawesome/free-solid-svg-icons";
+import io from "socket.io-client";
+import "./Chat.css";
+import { Link } from "react-router-dom";
 
-
-const socket = io('http://localhost:4000');
+const socket = io("https://job-lxhp.onrender.com");
 
 const Chat = () => {
   const [data, setData] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [username, setUsername] = useState('');
+  const [newMessage, setNewMessage] = useState("");
+  const [username, setUsername] = useState("");
   const [error, setError] = useState(null);
   const messageRef = useRef(null);
 
@@ -22,44 +25,44 @@ const Chat = () => {
       try {
         const res = await axios.get(`${window.location.origin}/myprofile`, {
           headers: {
-            'x-token': localStorage.getItem('token'),
+            "x-token": localStorage.getItem("token"),
           },
         });
         setUsername(res.data);
       } catch (error) {
         console.error(error);
-        setError('Error fetching user data');
+        setError("Error fetching user data");
       }
     };
 
     const fetchMessages = async () => {
       try {
-        const res = await axios.get('http://localhost:4000/getmsg', {
+        const res = await axios.get("https://job-lxhp.onrender.com/getmsg", {
           headers: {
-            'x-token': localStorage.getItem('token'),
+            "x-token": localStorage.getItem("token"),
           },
         });
         setMessages(res.data);
       } catch (error) {
         console.error(error);
-        setError('Error fetching messages');
+        setError("Error fetching messages");
       }
     };
 
     fetchUserData();
     fetchMessages();
 
-    socket.on('message', (messages) => {
+    socket.on("message", (messages) => {
       setMessages(messages);
     });
 
     return () => {
-      socket.off('message');
+      socket.off("message");
     };
   }, []);
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       submitHandler(event);
     }
   };
@@ -71,30 +74,30 @@ const Chat = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) {
-      setError('Please enter a message');
+      setError("Please enter a message");
       return;
     }
 
     try {
       await axios.post(
-        'http://localhost:4000/addmsg',
+        "https://job-lxhp.onrender.com/addmsg",
         { text: newMessage, username: username.fullname },
         {
           headers: {
-            'x-token': localStorage.getItem('token'),
+            "x-token": localStorage.getItem("token"),
           },
         }
       );
-      setNewMessage('');
+      setNewMessage("");
       setError(null);
     } catch (error) {
-      console.error('Error sending message:', error);
-      setError('Error sending message');
+      console.error("Error sending message:", error);
+      setError("Error sending message");
     }
   };
 
   const handleEmojiPicker = () => {
-    console.log('Emoji button clicked');
+    console.log("Emoji button clicked");
   };
 
   return (
@@ -150,7 +153,7 @@ const Chat = () => {
               <input
                 id="attachment"
                 type="file"
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
                 onChange={(e) => console.log(e.target.files[0])} // handle file upload if needed
               />
             </button>
